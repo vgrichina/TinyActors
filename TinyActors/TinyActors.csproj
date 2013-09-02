@@ -32,8 +32,11 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UntypedActor.cs" />
+    <Compile Include="Outcome.cs" />
+    <Compile Include="Mailbox.cs" />
+    <Compile Include="ActorSystem.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
