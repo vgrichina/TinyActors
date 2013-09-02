@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyActors", "TinyActors.csproj", "{44E53908-77B8-4757-B429-B5130120D8F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyActors.Demo", "TinyActors.Demo\TinyActors.Demo.csproj", "{C7305F15-A790-4776-B57B-31EC22718F71}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{44E53908-77B8-4757-B429-B5130120D8F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44E53908-77B8-4757-B429-B5130120D8F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44E53908-77B8-4757-B429-B5130120D8F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44E53908-77B8-4757-B429-B5130120D8F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7305F15-A790-4776-B57B-31EC22718F71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7305F15-A790-4776-B57B-31EC22718F71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7305F15-A790-4776-B57B-31EC22718F71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7305F15-A790-4776-B57B-31EC22718F71}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = TinyActors.csproj
+	EndGlobalSection
+EndGlobal
