@@ -59,13 +59,22 @@ namespace TinyActors
                 Tuple<string, object> message = null;
                 if (this.queue.TryTake(out message))
                 {
-                    this.outcomes = this.actor.ReceiveMessage(message.Item1, message.Item2).GetEnumerator();
+                    if (this.outcomes == null)
+                    {
+                        this.outcomes = this.actor.ReceiveMessage(message.Item1, message.Item2).GetEnumerator();
+                        if (!this.outcomes.MoveNext())
+                        {
+                            this.outcomes = null;
+                        }
+                    }
+
                     if (this.ProcessOutcomes())
                     {
                         failCount = 0;
                     }
                     else
                     {
+                        // Get out to allow thread to sleep and retry
                         return;
                     }
                 }
@@ -79,14 +88,15 @@ namespace TinyActors
                 return true;
             }
 
-            while (this.outcomes.MoveNext())
+            do
             {
                 if (!this.outcomes.Current.Process(this))
                 {
                     return false;
                 }
-            }
+            } while(this.outcomes.MoveNext());
 
+            this.outcomes = null;
             return true;
         }
 
