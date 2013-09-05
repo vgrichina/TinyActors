@@ -7,45 +7,29 @@ namespace TinyActors
 {
     public class Mailbox
     {
-        private BlockingCollection<Tuple<string, object>> queue;
-        internal BlockingCollection<Tuple<string, object>> Queue
-        {
-            get { return this.queue; }
-        }
+        internal BlockingCollection<Tuple<string, object>> Queue { get; private set; }
 
-        private ActorSystem system;
-        internal ActorSystem System
-        {
-            get { return this.system; }
-        }
+        internal ActorSystem System { get; private set; }
 
         private UntypedActor actor;
 
-        private IEnumerator<Outcome> outcomes = null;
-        internal IEnumerator<Outcome> Outcomes
-        {
-            get { return this.outcomes; }
-        }
+        internal IEnumerator<Outcome> Outcomes { get; private set; }
 
-        private string path;
-        internal string Path
-        {
-            get { return this.path; }
-        }
+        internal string Path { get; private set; }
 
         private Func<UntypedActor> actorCreateFunc;
 
         public Mailbox(ActorSystem system, string path, Func<UntypedActor> actorCreateFunc, int maxCapacity)
         {
-            this.system = system;
-            this.path = path;
+            this.System = system;
+            this.Path = path;
             this.actorCreateFunc = actorCreateFunc;
-            this.queue = new BlockingCollection<Tuple<string, object>>(maxCapacity);
+            this.Queue = new BlockingCollection<Tuple<string, object>>(maxCapacity);
         }
 
         internal void ProcessMessages()
         {
-            Debug.Assert(this.outcomes == null);
+            Debug.Assert(this.Outcomes == null);
 
             if (this.actor == null)
             {
@@ -53,18 +37,18 @@ namespace TinyActors
             }
 
             int failCount = 0;
-            while (failCount < this.queue.Count)
+            while (failCount < this.Queue.Count)
             {
                 failCount++;
                 Tuple<string, object> message = null;
-                if (this.queue.TryTake(out message))
+                if (this.Queue.TryTake(out message))
                 {
-                    if (this.outcomes == null)
+                    if (this.Outcomes == null)
                     {
-                        this.outcomes = this.actor.ReceiveMessage(message.Item1, message.Item2).GetEnumerator();
-                        if (!this.outcomes.MoveNext())
+                        this.Outcomes = this.actor.ReceiveMessage(message.Item1, message.Item2).GetEnumerator();
+                        if (!this.Outcomes.MoveNext())
                         {
-                            this.outcomes = null;
+                            this.Outcomes = null;
                         }
                     }
 
@@ -83,26 +67,39 @@ namespace TinyActors
 
         internal bool ProcessOutcomes()
         {
-            if (this.outcomes == null)
+            if (this.Outcomes == null)
             {
                 return true;
             }
 
             do
             {
-                if (!this.outcomes.Current.Process(this))
+                if (!this.Outcomes.Current.Process(this))
                 {
                     return false;
                 }
-            } while(this.outcomes.MoveNext());
+            } while(this.Outcomes.MoveNext());
 
-            this.outcomes = null;
+            this.Outcomes = null;
             return true;
         }
 
         internal bool TrySendMessage(string srcPath, object message)
         {
-            return this.queue.TryAdd(Tuple.Create(srcPath, message));
+            return this.Queue.TryAdd(Tuple.Create(srcPath, message));
+        }
+
+        internal void Stop()
+        {
+            if (this.Queue.Count > 0)
+            {
+                Console.WriteLine("Mailbox " + this.Path + " has " + this.Queue.Count + " unprocessed messages");
+            }
+
+            if (this.Outcomes != null)
+            {
+                Console.WriteLine("Mailbox " + this.Path + " has unprocessed outcomes");
+            }
         }
     }
 }

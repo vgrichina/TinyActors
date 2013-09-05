@@ -96,16 +96,7 @@ namespace TinyActors
                     Thread.Sleep(1);
                 }
 
-                if (mailbox.Queue.Count > 0)
-                {
-                    Console.WriteLine("Mailbox " + mailbox.Path + " has " + mailbox.Queue.Count + " unprocessed messages");
-                }
-
-                if (mailbox.Outcomes != null)
-                {
-                    Console.WriteLine("Mailbox " + mailbox.Path + " has unprocessed outcomes");
-                }
-
+                mailbox.Stop();
                 stoppedMailboxes.Add(mailbox);
             }
 
