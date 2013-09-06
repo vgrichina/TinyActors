@@ -10,12 +10,13 @@ namespace TinyActors
     {
         private ConcurrentQueue<Mailbox> queue;
         private ConcurrentDictionary<string, Mailbox> mailboxes;
-        private int numThreads = 4; // TODO: Make configurable
+        private int numThreads;
         private List<Thread> threads;
         private bool isStopping = false;
 
-        public ActorSystem()
+        public ActorSystem(int numThreads)
         {
+            this.numThreads = numThreads;
             this.queue = new ConcurrentQueue<Mailbox>();
             this.mailboxes = new ConcurrentDictionary<string, Mailbox>();
             this.threads = Enumerable.Range(0, this.numThreads).Select(i => new Thread(this.RunThread)).ToList();
