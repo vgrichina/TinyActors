@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace TinyActors
 {
@@ -17,6 +18,11 @@ namespace TinyActors
         protected Outcome SendMessage(string dstPath, object message)
         {
             return new SendMessageOutcome(dstPath, message);
+        }
+
+        protected Outcome AwaitTask<T>(Task<T> task)
+        {
+            return new AwaitTaskOutcome<T>(task);
         }
     }
 }

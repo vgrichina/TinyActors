@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 
 namespace TinyActors
 {
@@ -25,6 +26,21 @@ namespace TinyActors
         internal override bool Process(Mailbox mailbox)
         {
             return mailbox.System.TrySendMessage(mailbox.Path, dstPath, message);
+        }
+    }
+
+    public class AwaitTaskOutcome<T> : Outcome
+    {
+        private Task<T> task;
+
+        internal AwaitTaskOutcome(Task<T> task)
+        {
+            this.task = task;
+        }
+
+        internal override bool Process(Mailbox mailbox)
+        {
+            return this.task.IsCompleted;
         }
     }
 }
